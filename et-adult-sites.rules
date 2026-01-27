@@ -1,0 +1,161 @@
+# ============================================================================
+# SURICATA RULES FOR ADULT WEBSITES DETECTION
+# ============================================================================
+# 
+# These rules detect access to adult websites via:
+# - DNS queries (domain name resolution)
+# - HTTP requests (URLs)
+# - TLS SNI (HTTPS connection handshake)
+#
+# Usage: Import into Suricata on OPNsense or Linux
+# Purpose: Content filtering, parental controls, security monitoring
+#
+# ============================================================================
+
+# ============================================================================
+# PORNHUB
+# ============================================================================
+
+drop dns any any -> any 53 (msg:"OPN_Adult - PornHub - DNS request for pornhub.com"; dns_query; content:"pornhub.com"; nocase; classtype:policy-violation; sid:5101500; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - PornHub - DNS request for pornhub.com"; flow:established,to_server; tls.sni; content:"pornhub.com"; nocase; fast_pattern; classtype:policy-violation; sid:5101501; rev:1;)
+drop http any any -> any $HTTP_PORTS (msg:"OPN_Adult - PornHub - HTTP URL (pornhub.com)"; content:"pornhub.com"; http_uri; flow:to_server,established; classtype:policy-violation; sid:5101502; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - PornHub - TLS SNI (pornhub.com)"; tls_sni; content:"pornhub.com"; flow:to_server,established; classtype:policy-violation; sid:5101503; rev:1;)
+
+drop dns any any -> any 53 (msg:"OPN_Adult - PornHub - DNS request for pornhubpremium.com"; dns_query; content:"pornhubpremium.com"; nocase; classtype:policy-violation; sid:5101504; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - PornHub - DNS request for pornhubpremium.com"; flow:established,to_server; tls.sni; content:"pornhubpremium.com"; nocase; fast_pattern; classtype:policy-violation; sid:5101505; rev:1;)
+drop http any any -> any $HTTP_PORTS (msg:"OPN_Adult - PornHub - HTTP URL (pornhubpremium.com)"; content:"pornhubpremium.com"; http_uri; flow:to_server,established; classtype:policy-violation; sid:5101506; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - PornHub - TLS SNI (pornhubpremium.com)"; tls_sni; content:"pornhubpremium.com"; flow:to_server,established; classtype:policy-violation; sid:5101507; rev:1;)
+
+# ============================================================================
+# YOUPORN
+# ============================================================================
+
+drop dns any any -> any 53 (msg:"OPN_Adult - YouPorn - DNS request for youporn.com"; dns_query; content:"youporn.com"; nocase; classtype:policy-violation; sid:5101508; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - YouPorn - DNS request for youporn.com"; flow:established,to_server; tls.sni; content:"youporn.com"; nocase; fast_pattern; classtype:policy-violation; sid:5101509; rev:1;)
+drop http any any -> any $HTTP_PORTS (msg:"OPN_Adult - YouPorn - HTTP URL (youporn.com)"; content:"youporn.com"; http_uri; flow:to_server,established; classtype:policy-violation; sid:5101510; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - YouPorn - TLS SNI (youporn.com)"; tls_sni; content:"youporn.com"; flow:to_server,established; classtype:policy-violation; sid:5101511; rev:1;)
+
+# ============================================================================
+# XVIDEOS
+# ============================================================================
+
+drop dns any any -> any 53 (msg:"OPN_Adult - xVideos - DNS request for xvideos.com"; dns_query; content:"xvideos.com"; nocase; classtype:policy-violation; sid:5101512; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - xVideos - DNS request for xvideos.com"; flow:established,to_server; tls.sni; content:"xvideos.com"; nocase; fast_pattern; classtype:policy-violation; sid:5101513; rev:1;)
+drop http any any -> any $HTTP_PORTS (msg:"OPN_Adult - xVideos - HTTP URL (xvideos.com)"; content:"xvideos.com"; http_uri; flow:to_server,established; classtype:policy-violation; sid:5101514; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - xVideos - TLS SNI (xvideos.com)"; tls_sni; content:"xvideos.com"; flow:to_server,established; classtype:policy-violation; sid:5101515; rev:1;)
+
+drop dns any any -> any 53 (msg:"OPN_Adult - xVideos - DNS request for xvideos1.com"; dns_query; content:"xvideos1.com"; nocase; classtype:policy-violation; sid:5101516; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - xVideos - DNS request for xvideos1.com"; flow:established,to_server; tls.sni; content:"xvideos1.com"; nocase; fast_pattern; classtype:policy-violation; sid:5101517; rev:1;)
+drop http any any -> any $HTTP_PORTS (msg:"OPN_Adult - xVideos - HTTP URL (xvideos1.com)"; content:"xvideos1.com"; http_uri; flow:to_server,established; classtype:policy-violation; sid:5101518; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - xVideos - TLS SNI (xvideos1.com)"; tls_sni; content:"xvideos1.com"; flow:to_server,established; classtype:policy-violation; sid:5101519; rev:1;)
+
+# ============================================================================
+# REDTUBE
+# ============================================================================
+
+drop dns any any -> any 53 (msg:"OPN_Adult - RedTube - DNS request for redtube.com"; dns_query; content:"redtube.com"; nocase; classtype:policy-violation; sid:5101520; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - RedTube - DNS request for redtube.com"; flow:established,to_server; tls.sni; content:"redtube.com"; nocase; fast_pattern; classtype:policy-violation; sid:5101521; rev:1;)
+drop http any any -> any $HTTP_PORTS (msg:"OPN_Adult - RedTube - HTTP URL (redtube.com)"; content:"redtube.com"; http_uri; flow:to_server,established; classtype:policy-violation; sid:5101522; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - RedTube - TLS SNI (redtube.com)"; tls_sni; content:"redtube.com"; flow:to_server,established; classtype:policy-violation; sid:5101523; rev:1;)
+
+# ============================================================================
+# XNXX
+# ============================================================================
+
+drop dns any any -> any 53 (msg:"OPN_Adult - xNxx - DNS request for xnxx.com"; dns_query; content:"xnxx.com"; nocase; classtype:policy-violation; sid:5101524; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - xNxx - DNS request for xnxx.com"; flow:established,to_server; tls.sni; content:"xnxx.com"; nocase; fast_pattern; classtype:policy-violation; sid:5101525; rev:1;)
+drop http any any -> any $HTTP_PORTS (msg:"OPN_Adult - xNxx - HTTP URL (xnxx.com)"; content:"xnxx.com"; http_uri; flow:to_server,established; classtype:policy-violation; sid:5101526; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - xNxx - TLS SNI (xnxx.com)"; tls_sni; content:"xnxx.com"; flow:to_server,established; classtype:policy-violation; sid:5101527; rev:1;)
+
+drop dns any any -> any 53 (msg:"OPN_Adult - xNxx - DNS request for xnxx1.com"; dns_query; content:"xnxx1.com"; nocase; classtype:policy-violation; sid:5101528; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - xNxx - DNS request for xnxx1.com"; flow:established,to_server; tls.sni; content:"xnxx1.com"; nocase; fast_pattern; classtype:policy-violation; sid:5101529; rev:1;)
+drop http any any -> any $HTTP_PORTS (msg:"OPN_Adult - xNxx - HTTP URL (xnxx1.com)"; content:"xnxx1.com"; http_uri; flow:to_server,established; classtype:policy-violation; sid:5101530; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - xNxx - TLS SNI (xnxx1.com)"; tls_sni; content:"xnxx1.com"; flow:to_server,established; classtype:policy-violation; sid:5101531; rev:1;)
+
+# ============================================================================
+# SPANKBANG
+# ============================================================================
+
+drop dns any any -> any 53 (msg:"OPN_Adult - SpankBang - DNS request for spankbang.com"; dns_query; content:"spankbang.com"; nocase; classtype:policy-violation; sid:5101532; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - SpankBang - DNS request for spankbang.com"; flow:established,to_server; tls.sni; content:"spankbang.com"; nocase; fast_pattern; classtype:policy-violation; sid:5101533; rev:1;)
+drop http any any -> any $HTTP_PORTS (msg:"OPN_Adult - SpankBang - HTTP URL (spankbang.com)"; content:"spankbang.com"; http_uri; flow:to_server,established; classtype:policy-violation; sid:5101534; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - SpankBang - TLS SNI (spankbang.com)"; tls_sni; content:"spankbang.com"; flow:to_server,established; classtype:policy-violation; sid:5101535; rev:1;)
+
+# ============================================================================
+# TUBE8
+# ============================================================================
+
+drop dns any any -> any 53 (msg:"OPN_Adult - Tube8 - DNS request for tube8.com"; dns_query; content:"tube8.com"; nocase; classtype:policy-violation; sid:5101536; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - Tube8 - DNS request for tube8.com"; flow:established,to_server; tls.sni; content:"tube8.com"; nocase; fast_pattern; classtype:policy-violation; sid:5101537; rev:1;)
+drop http any any -> any $HTTP_PORTS (msg:"OPN_Adult - Tube8 - HTTP URL (tube8.com)"; content:"tube8.com"; http_uri; flow:to_server,established; classtype:policy-violation; sid:5101538; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - Tube8 - TLS SNI (tube8.com)"; tls_sni; content:"tube8.com"; flow:to_server,established; classtype:policy-violation; sid:5101539; rev:1;)
+
+# ============================================================================
+# XHAMSTER
+# ============================================================================
+
+drop dns any any -> any 53 (msg:"OPN_Adult - xHamster - DNS request for xhamster.com"; dns_query; content:"xhamster.com"; nocase; classtype:policy-violation; sid:5101540; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - xHamster - DNS request for xhamster.com"; flow:established,to_server; tls.sni; content:"xhamster.com"; nocase; fast_pattern; classtype:policy-violation; sid:5101541; rev:1;)
+drop http any any -> any $HTTP_PORTS (msg:"OPN_Adult - xHamster - HTTP URL (xhamster.com)"; content:"xhamster.com"; http_uri; flow:to_server,established; classtype:policy-violation; sid:5101542; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - xHamster - TLS SNI (xhamster.com)"; tls_sni; content:"xhamster.com"; flow:to_server,established; classtype:policy-violation; sid:5101543; rev:1;)
+
+drop dns any any -> any 53 (msg:"OPN_Adult - xHamster - DNS request for xhamster1.com"; dns_query; content:"xhamster1.com"; nocase; classtype:policy-violation; sid:5101544; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - xHamster - DNS request for xhamster1.com"; flow:established,to_server; tls.sni; content:"xhamster1.com"; nocase; fast_pattern; classtype:policy-violation; sid:5101545; rev:1;)
+drop http any any -> any $HTTP_PORTS (msg:"OPN_Adult - xHamster - HTTP URL (xhamster1.com)"; content:"xhamster1.com"; http_uri; flow:to_server,established; classtype:policy-violation; sid:5101546; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - xHamster - TLS SNI (xhamster1.com)"; tls_sni; content:"xhamster1.com"; flow:to_server,established; classtype:policy-violation; sid:5101547; rev:1;)
+
+# ============================================================================
+# IMAGEFAP
+# ============================================================================
+
+drop dns any any -> any 53 (msg:"OPN_Adult - ImageFap - DNS request for imagefap.com"; dns_query; content:"imagefap.com"; nocase; classtype:policy-violation; sid:5101548; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - ImageFap - DNS request for imagefap.com"; flow:established,to_server; tls.sni; content:"imagefap.com"; nocase; fast_pattern; classtype:policy-violation; sid:5101549; rev:1;)
+drop http any any -> any $HTTP_PORTS (msg:"OPN_Adult - ImageFap - HTTP URL (imagefap.com)"; content:"imagefap.com"; http_uri; flow:to_server,established; classtype:policy-violation; sid:5101550; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - ImageFap - TLS SNI (imagefap.com)"; tls_sni; content:"imagefap.com"; flow:to_server,established; classtype:policy-violation; sid:5101551; rev:1;)
+
+# ============================================================================
+# EPORNER
+# ============================================================================
+
+drop dns any any -> any 53 (msg:"OPN_Adult - ePorner - DNS request for eporner.com"; dns_query; content:"eporner.com"; nocase; classtype:policy-violation; sid:5101552; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - ePorner - DNS request for eporner.com"; flow:established,to_server; tls.sni; content:"eporner.com"; nocase; fast_pattern; classtype:policy-violation; sid:5101553; rev:1;)
+drop http any any -> any $HTTP_PORTS (msg:"OPN_Adult - ePorner - HTTP URL (eporner.com)"; content:"eporner.com"; http_uri; flow:to_server,established; classtype:policy-violation; sid:5101554; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - ePorner - TLS SNI (eporner.com)"; tls_sni; content:"eporner.com"; flow:to_server,established; classtype:policy-violation; sid:5101555; rev:1;)
+
+# ============================================================================
+# SUNPORNO
+# ============================================================================
+
+drop dns any any -> any 53 (msg:"OPN_Adult - SunPorno - DNS request for sunporno.com"; dns_query; content:"sunporno.com"; nocase; classtype:policy-violation; sid:5101556; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - SunPorno - DNS request for sunporno.com"; flow:established,to_server; tls.sni; content:"sunporno.com"; nocase; fast_pattern; classtype:policy-violation; sid:5101557; rev:1;)
+drop http any any -> any $HTTP_PORTS (msg:"OPN_Adult - SunPorno - HTTP URL (sunporno.com)"; content:"sunporno.com"; http_uri; flow:to_server,established; classtype:policy-violation; sid:5101558; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - SunPorno - TLS SNI (sunporno.com)"; tls_sni; content:"sunporno.com"; flow:to_server,established; classtype:policy-violation; sid:5101559; rev:1;)
+
+# ============================================================================
+# PORN365
+# ============================================================================
+
+drop dns any any -> any 53 (msg:"OPN_Adult - Porn365 - DNS request for porn365.com"; dns_query; content:"porn365.com"; nocase; classtype:policy-violation; sid:5101560; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - Porn365 - DNS request for porn365.com"; flow:established,to_server; tls.sni; content:"porn365.com"; nocase; fast_pattern; classtype:policy-violation; sid:5101561; rev:1;)
+drop http any any -> any $HTTP_PORTS (msg:"OPN_Adult - Porn365 - HTTP URL (porn365.com)"; content:"porn365.com"; http_uri; flow:to_server,established; classtype:policy-violation; sid:5101562; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - Porn365 - TLS SNI (porn365.com)"; tls_sni; content:"porn365.com"; flow:to_server,established; classtype:policy-violation; sid:5101563; rev:1;)
+
+# ============================================================================
+# PORNOXO
+# ============================================================================
+
+drop dns any any -> any 53 (msg:"OPN_Adult - PornoXO - DNS request for pornoxo.com"; dns_query; content:"pornoxo.com"; nocase; classtype:policy-violation; sid:5101564; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - PornoXO - DNS request for pornoxo.com"; flow:established,to_server; tls.sni; content:"pornoxo.com"; nocase; fast_pattern; classtype:policy-violation; sid:5101565; rev:1;)
+drop http any any -> any $HTTP_PORTS (msg:"OPN_Adult - PornoXO - HTTP URL (pornoxo.com)"; content:"pornoxo.com"; http_uri; flow:to_server,established; classtype:policy-violation; sid:5101566; rev:1;)
+drop tls any any -> any any (msg:"OPN_Adult - PornoXO - TLS SNI (pornoxo.com)"; tls_sni; content:"pornoxo.com"; flow:to_server,established; classtype:policy-violation; sid:5101567; rev:1;)
+
+# ============================================================================
+# VIMEO ADULT (Some adult content on general platforms)
+# ============================================================================
+
+# NOTE: Vimeo is a general platform with some adult content
+# Blocking entire domain may block legitimate content
+# Consider blocking specific keywords instead of entire domain
+
+drop dns any any -> any 53 (msg:"OPN_Adult - Adult content keywords DNS"; dns_query; content:"escort"; nocase; content:"adult"; nocase; classtype:policy-violation; sid:5101568; rev:2;)
+drop tls any any -> any any (msg:"OPN_Adult - Adult content keywords TLS SNI"; flow:established,to_server; tls.sni; content:"escort"; nocase; content:"adult"; nocase; fast_pattern; classtype:policy-violation; sid:5101569; rev:3;)
