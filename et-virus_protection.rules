@@ -1,0 +1,139 @@
+# Virus Detection Rules for Suricata - Combined File
+# This file combines custom virus detection rules and Emerging Threats virus protection rules
+# Purpose: Detect and block virus infections and propagation
+# Created: December 2024
+# Total Rules: 34
+
+# ============================================================================
+# VIRUS SIGNATURES
+# ============================================================================
+
+# Generic Virus Pattern - PE File with Suspicious Strings
+drop http any any -> any any (msg:"VIRUS Suspicious PE File with Auto-Run"; flow:established,to_client; file_data; content:"MZ"; depth:2; content:"autorun"; nocase; distance:0; classtype:trojan-activity; sid:6400000; rev:1;)
+
+# Office Macro with Suspicious Keywords
+drop http any any -> any any (msg:"VIRUS Office Macro with Shell Execute"; flow:established,to_client; file_data; content:"Shell"; nocase; content:"Execute"; nocase; distance:0; classtype:trojan-activity; sid:6400001; rev:2;)
+
+# Word Macro with Auto-Execute
+drop http any any -> any any (msg:"VIRUS Word Macro Auto-Execute"; flow:established,to_client; file_data; content:"AutoOpen"; nocase; classtype:trojan-activity; sid:6400002; rev:2;)
+
+# Excel Macro with Auto-Execute
+drop http any any -> any any (msg:"VIRUS Excel Macro Auto-Execute"; flow:established,to_client; file_data; content:"Auto_Open"; nocase; classtype:trojan-activity; sid:6400003; rev:2;)
+
+# PowerPoint Macro with Auto-Execute
+drop http any any -> any any (msg:"VIRUS PowerPoint Macro Auto-Execute"; flow:established,to_client; file_data; content:"Auto_Open"; nocase; classtype:trojan-activity; sid:6400004; rev:2;)
+
+# ============================================================================
+# VIRUS PROPAGATION METHODS
+# ============================================================================
+
+# USB Worm - Autorun.inf Detection
+drop smb any any -> any any (msg:"VIRUS USB Worm Autorun.inf"; flow:established; content:"autorun.inf"; nocase; content:"open="; nocase; distance:0; classtype:trojan-activity; sid:6400005; rev:1;)
+
+# Email Virus Attachment Patterns
+drop smtp any any -> any any (msg:"VIRUS Suspicious Email Attachment - Double Extension"; flow:established; content:"filename="; nocase; pcre:"/filename=\"[^\"]+\.(doc|pdf|jpg)\.(exe|scr|bat)\"/i"; classtype:trojan-activity; sid:6400006; rev:1;)
+
+# Macro Virus in Office Documents
+drop http any any -> any any (msg:"VIRUS Macro-Enabled Document with Suspicious Content"; flow:established,to_client; file_data; content:"CreateObject"; nocase; classtype:trojan-activity; sid:6400007; rev:2;)
+
+# ============================================================================
+# BOOT SECTOR & FILE INFECTOR VIRUSES
+# ============================================================================
+
+# MBR (Master Boot Record) Virus Indicators
+drop smb any any -> any any (msg:"VIRUS MBR Virus Signature"; flow:established; content:"|55 AA|"; content:"NTLDR"; distance:0; classtype:trojan-activity; sid:6400008; rev:1;)
+
+# File Infector - PE File Modification
+drop http any any -> any any (msg:"VIRUS PE File Infector Pattern"; flow:established,to_client; file_data; content:"MZ"; depth:2; content:"|E9|"; distance:58; within:3; classtype:trojan-activity; sid:6400009; rev:1;)
+
+# ============================================================================
+# POLYMORPHIC & METAMORPHIC VIRUSES
+# ============================================================================
+
+# Polymorphic Virus - Self-Decryption Routine
+drop http any any -> any any (msg:"VIRUS Polymorphic Decryption Routine"; flow:established,to_client; file_data; content:"MZ"; depth:2; content:"|EB|"; distance:0; within:100; content:"|5E 56|"; distance:0; within:50; classtype:trojan-activity; sid:6400010; rev:1;)
+
+# ============================================================================
+# SCRIPT VIRUSES (VBS, JS, BAT)
+# ============================================================================
+
+# VBScript Virus Patterns
+drop http any any -> any any (msg:"VIRUS VBScript Self-Replication"; flow:established,to_client; file_data; content:"WScript.Shell"; nocase; content:"CopyFile"; nocase; distance:0; classtype:trojan-activity; sid:6400011; rev:2;)
+
+# JavaScript Virus Patterns
+drop http any any -> any any (msg:"VIRUS JavaScript File System Access"; flow:established,to_client; file_data; content:"ActiveXObject"; nocase; content:"Scripting.FileSystemObject"; nocase; distance:0; classtype:trojan-activity; sid:6400012; rev:2;)
+
+# Batch File Virus
+drop http any any -> any any (msg:"VIRUS Batch File Self-Replication"; flow:established,to_client; file_data; content:"copy"; nocase; content:"%0"; nocase; distance:0; classtype:trojan-activity; sid:6400013; rev:2;)
+
+# ============================================================================
+# KNOWN VIRUS FAMILIES
+# ============================================================================
+
+# Conficker Worm
+drop tcp any any -> any 445 (msg:"VIRUS Conficker Worm Activity"; flow:established; content:"|ff|SMB"; content:"IPC$"; distance:0; classtype:trojan-activity; sid:6400014; rev:1;)
+
+# Sasser Worm
+drop tcp any any -> any 445 (msg:"VIRUS Sasser Worm Propagation"; flow:established; content:"|00 00 00 25|"; depth:4; classtype:trojan-activity; sid:6400015; rev:1;)
+
+# WannaCry Ransomware/Worm
+drop tcp any any -> any 445 (msg:"VIRUS WannaCry SMB Exploit"; flow:established; content:"SMBr"; depth:8; content:"|00 00 00 ff fe|"; distance:0; classtype:trojan-activity; sid:6400016; rev:1;)
+
+# ============================================================================
+# VIRUS BEHAVIOR PATTERNS
+# ============================================================================
+
+# File Timestamp Manipulation
+drop smb any any -> any any (msg:"VIRUS File Timestamp Manipulation"; flow:established; content:"SetFileTime"; nocase; classtype:trojan-activity; sid:6400017; rev:1;)
+
+# Hidden File Attributes
+drop smb any any -> any any (msg:"VIRUS Hidden System File Creation"; flow:established; content:"FILE_ATTRIBUTE_HIDDEN"; nocase; content:"FILE_ATTRIBUTE_SYSTEM"; nocase; distance:0; classtype:trojan-activity; sid:6400018; rev:1;)
+
+# Registry Autorun Modification (Windows)
+drop tcp any any -> any any (msg:"VIRUS Registry Autorun Modification"; flow:established; content:"Software\\Microsoft\\Windows\\CurrentVersion\\Run"; nocase; classtype:trojan-activity; sid:6400019; rev:1;)
+
+# ============================================================================
+# CROSS-PLATFORM VIRUSES
+# ============================================================================
+
+# Java Virus
+drop http any any -> any any (msg:"VIRUS Java Malicious Class File"; flow:established,to_client; file_data; content:"|CA FE BA BE|"; depth:4; classtype:trojan-activity; sid:6400020; rev:2;)
+
+# PDF Virus with Embedded JavaScript
+drop http any any -> any any (msg:"VIRUS PDF with Malicious JavaScript"; flow:established,to_client; file_data; content:"/JS"; nocase; content:"/JavaScript"; nocase; distance:0; classtype:trojan-activity; sid:6400021; rev:2;)
+
+# ============================================================================
+# VIRUS DOWNLOAD SOURCES
+# ============================================================================
+
+# Download from Known Malicious Patterns
+drop http any any -> any any (msg:"VIRUS Download from Suspicious TLD"; flow:established,to_client; file_data; content:"MZ"; depth:2; classtype:trojan-activity; sid:6400022; rev:4;)
+
+# Executable Downloaded from Pastebin/Text Sites
+drop http any any -> any any (msg:"VIRUS Executable from Pastebin"; flow:established,to_client; file_data; content:"MZ"; depth:2; classtype:trojan-activity; sid:6400023; rev:2;)
+# ============================================================================
+# EMERGING THREATS VIRUS PROTECTION RULES
+# ============================================================================
+# The following rules are from Emerging Threats et-virus_protection.rules
+# These rules detect recent malware, phishing, and virus-related threats
+# ============================================================================
+
+drop http any any -> any any (msg:"ET EXPLOIT Attempted D-Link ShareCenter (DNS-320/325) RCE (Inbound)"; flow:established,to_server; http.method; content:"GET"; http.uri; content:"/cgi-bin/system_mgr.cgi?cmd=cgi_sms_test&command1="; startswith; fast_pattern; reference:url,roberto.greyhats.it/advisories/20120208-dlink-rce.txt/; classtype:web-application-attack; sid:6400024; rev:1; metadata:affected_product Router, attack_target Client_Endpoint, created_at 2020_05_07, deployment Perimeter, confidence High, signature_severity Major, updated_at 2020_05_07;)
+
+drop http any any -> any any (msg:"ET MALWARE D-Link ShareCenter (DNS-320/325) RCE (Outbound)"; flow:established,to_server; http.method; content:"GET"; http.uri; content:"/cgi-bin/system_mgr.cgi?cmd=cgi_sms_test&command1="; startswith; fast_pattern; reference:url,roberto.greyhats.it/advisories/20120208-dlink-rce.txt/; classtype:web-application-attack; sid:6400025; rev:1; metadata:affected_product Router, attack_target Client_Endpoint, created_at 2020_05_07, deployment Perimeter, confidence High, signature_severity Major, updated_at 2020_05_07;)
+
+drop http any any -> $HTTP_SERVERS any (msg:"ET WEB_SPECIFIC_APPS ClickTech Click Gallery SQL Injection Attempt -- view_recent.asp currentpage SELECT"; flow:established,to_server; http.uri; content:"/view_recent.asp?"; nocase; content:"currentpage="; nocase; content:"SELECT"; nocase; content:"FROM"; nocase; distance:0; reference:cve,CVE-2006-6187; reference:url,www.securityfocus.com/archive/1/archive/1/452733/100/0/threaded; classtype:web-application-attack; sid:6400026; rev:9; metadata:affected_product Web_Server_Applications, attack_target Web_Server, created_at 2010_07_30, deployment Datacenter, confidence Medium, signature_severity Major, tag SQL_Injection, updated_at 2020_09_10, mitre_tactic_id TA0001, mitre_tactic_name Initial_Access, mitre_technique_id T1190, mitre_technique_name Exploit_Public_Facing_Application;)
+
+drop http any any -> $HTTP_SERVERS any (msg:"ET WEB_SPECIFIC_APPS ClickTech Click Gallery SQL Injection Attempt -- view_recent.asp currentpage UNION SELECT"; flow:established,to_server; http.uri; content:"/view_recent.asp?"; nocase; content:"currentpage="; nocase; content:"UNION"; nocase; content:"SELECT"; nocase; distance:0; reference:cve,CVE-2006-6187; reference:url,www.securityfocus.com/archive/1/archive/1/452733/100/0/threaded; classtype:web-application-attack; sid:6400027; rev:9; metadata:affected_product Web_Server_Applications, attack_target Web_Server, created_at 2010_07_30, deployment Datacenter, confidence Medium, signature_severity Major, tag SQL_Injection, updated_at 2020_09_10, mitre_tactic_id TA0001, mitre_tactic_name Initial_Access, mitre_technique_id T1190, mitre_technique_name Exploit_Public_Facing_Application;)
+
+drop http any any -> $HTTP_SERVERS any (msg:"ET WEB_SPECIFIC_APPS ClickTech Click Gallery SQL Injection Attempt -- view_recent.asp currentpage INSERT"; flow:established,to_server; http.uri; content:"/view_recent.asp?"; nocase; content:"currentpage="; nocase; content:"INSERT"; nocase; content:"INTO"; nocase; distance:0; reference:cve,CVE-2006-6187; reference:url,www.securityfocus.com/archive/1/archive/1/452733/100/0/threaded; classtype:web-application-attack; sid:6400028; rev:8; metadata:affected_product Web_Server_Applications, attack_target Web_Server, created_at 2010_07_30, deployment Datacenter, confidence Medium, signature_severity Major, tag SQL_Injection, updated_at 2020_09_10, mitre_tactic_id TA0001, mitre_tactic_name Initial_Access, mitre_technique_id T1190, mitre_technique_name Exploit_Public_Facing_Application;)
+
+drop http any any -> $HTTP_SERVERS any (msg:"ET WEB_SPECIFIC_APPS ClickTech Click Gallery SQL Injection Attempt -- view_recent.asp currentpage DELETE"; flow:established,to_server; http.uri; content:"/view_recent.asp?"; nocase; content:"currentpage="; nocase; content:"DELETE"; nocase; content:"FROM"; nocase; distance:0; reference:cve,CVE-2006-6187; reference:url,www.securityfocus.com/archive/1/archive/1/452733/100/0/threaded; classtype:web-application-attack; sid:6400029; rev:9; metadata:affected_product Web_Server_Applications, attack_target Web_Server, created_at 2010_07_30, deployment Datacenter, confidence Medium, signature_severity Major, tag SQL_Injection, updated_at 2020_09_10, mitre_tactic_id TA0001, mitre_tactic_name Initial_Access, mitre_technique_id T1190, mitre_technique_name Exploit_Public_Facing_Application;)
+
+drop http any any -> $HTTP_SERVERS any (msg:"ET WEB_SPECIFIC_APPS ClickTech Click Gallery SQL Injection Attempt -- view_recent.asp currentpage ASCII"; flow:established,to_server; http.uri; content:"/view_recent.asp?"; nocase; content:"currentpage="; nocase; content:"ASCII("; nocase; content:"SELECT"; nocase; distance:0; reference:cve,CVE-2006-6187; reference:url,www.securityfocus.com/archive/1/archive/1/452733/100/0/threaded; classtype:web-application-attack; sid:6400030; rev:9; metadata:affected_product Web_Server_Applications, attack_target Web_Server, created_at 2010_07_30, deployment Datacenter, confidence Medium, signature_severity Major, tag SQL_Injection, updated_at 2020_09_10, mitre_tactic_id TA0001, mitre_tactic_name Initial_Access, mitre_technique_id T1190, mitre_technique_name Exploit_Public_Facing_Application;)
+
+drop http any any -> $HTTP_SERVERS any (msg:"ET WEB_SPECIFIC_APPS ClickTech Click Gallery SQL Injection Attempt -- view_recent.asp currentpage UPDATE"; flow:established,to_server; http.uri; content:"/view_recent.asp?"; nocase; content:"currentpage="; nocase; content:"UPDATE"; nocase; content:"SET"; nocase; distance:0; reference:cve,CVE-2006-6187; reference:url,www.securityfocus.com/archive/1/archive/1/452733/100/0/threaded; classtype:web-application-attack; sid:6400031; rev:9; metadata:affected_product Web_Server_Applications, attack_target Web_Server, created_at 2010_07_30, deployment Datacenter, confidence Medium, signature_severity Major, tag SQL_Injection, updated_at 2020_09_10, mitre_tactic_id TA0001, mitre_tactic_name Initial_Access, mitre_technique_id T1190, mitre_technique_name Exploit_Public_Facing_Application;)
+
+drop http any any -> any any (msg:"ET EXPLOIT_KIT Cool Java Exploit Recent Jar (1)"; flow:established,to_client; flowbits:set,et.exploitkitlanding; file.data; content:"PK"; within:2; content:"SunJCE.class"; classtype:exploit-kit; sid:6400032; rev:5; metadata:created_at 2013_02_13, signature_severity Major, tag Description_Generated_By_Proofpoint_Nexus, updated_at 2024_03_14;)
+
+drop http any any -> any any (msg:"ET HUNTING SUSPICIOUS EXE Download from specific file share site (used in recent maldoc campaign)"; flow:established,to_server; http.uri; content:".exe"; http.host; bsize:10; content:"a.pomf.cat"; fast_pattern; http.header_names; to_lowercase; content:!"|0d 0a|referer|0d 0a|"; reference:md5,c321f38862a24dc8a72a251616b3afdf; classtype:trojan-activity; sid:6400033; rev:6; metadata:created_at 2016_06_09, confidence Medium, signature_severity Major, tag Description_Generated_By_Proofpoint_Nexus, updated_at 2024_04_30;)

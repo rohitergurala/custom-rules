@@ -1,0 +1,34 @@
+# ===== CORRECTED NMAP DETECTION RULES =====
+
+# SYN SCAN -sS (speeds T1-T5) - Common ports
+alert tcp any any -> any [21,22,23,25,53,80,88,110,135,137,138,139,143,161,389,443,445,465,514,587,636,853,993,995,1194,1433,1720,3306,3389,8080,8443,11211,27017,51820] (msg:"NMAP SYN Scan - Common Ports"; flow:to_server,established; flags:S,!A; threshold:type threshold, track by_src, count 20, seconds 70; classtype:attempted-recon; sid:3400001; rev:2;)
+
+# SYN SCAN -sS (speeds T1-T5) - Uncommon ports
+alert tcp any any -> any ![21,22,23,25,53,80,88,110,135,137,138,139,143,161,389,443,445,465,514,587,636,853,993,995,1194,1433,1720,3306,3389,8080,8443,11211,27017,51820] (msg:"NMAP SYN Scan - Uncommon Ports"; flow:to_server,established; flags:S,!A; threshold:type threshold, track by_src, count 7, seconds 135; classtype:attempted-recon; sid:3400002; rev:2;)
+
+# TCP CONNECT SCAN -sT (speeds T2-T5)
+alert tcp any any -> any any (msg:"NMAP TCP Connect Scan"; flow:to_server; flags:S; threshold:type threshold, track by_src, count 20, seconds 60; classtype:attempted-recon; sid:3400003; rev:2;)
+
+# ACK SCAN -sA (speeds T2-T5)
+alert tcp any any -> any any (msg:"NMAP ACK Scan"; flags:A,!S; flow:to_server; threshold:type threshold, track by_dst, count 20, seconds 70; classtype:attempted-recon; sid:3400004; rev:2;)
+
+# CHRISTMAS TREE SCAN -sX (FPU flags)
+alert tcp any any -> any any (msg:"NMAP Christmas Tree Scan"; flags:F,P,U; threshold:type threshold, track by_src, count 3, seconds 120; classtype:attempted-recon; sid:3400005; rev:2;)
+
+# NULL SCAN -sN (no flags set)
+alert tcp any any -> any any (msg:"NMAP Null Scan"; flags:!F,!S,!R,!P,!A,!U; threshold:type threshold, track by_src, count 5, seconds 60; classtype:attempted-recon; sid:3400005b; rev:1;)
+
+# FRAGMENTED PACKETS
+alert ip any any -> any any (msg:"Fragmented Scan Attempt"; fragbits:M; threshold:type threshold, track by_src, count 10, seconds 60; classtype:attempted-recon; sid:3400006; rev:2;)
+
+# UDP SCAN -sU (Common ports)
+alert udp any any -> any [53,67,68,69,123,161,162,389,520,1026,1027,1028,1029,1194,1434,1900,11211,12345,27017,51820] (msg:"NMAP UDP Scan - Common Ports"; flow:to_server; threshold:type threshold, track by_src, count 20, seconds 70; classtype:attempted-recon; sid:3400007; rev:2;)
+
+# UDP SCAN -sU (Uncommon ports)
+alert udp any any -> any ![53,67,68,69,123,161,162,389,520,1026,1027,1028,1029,1194,1434,1900,11211,12345,27017,51820] (msg:"NMAP UDP Scan - Uncommon Ports"; flow:to_server; threshold:type threshold, track by_src, count 7, seconds 135; classtype:attempted-recon; sid:3400008; rev:2;)
+
+# Suspicious port 4444 activity (Metasploit)
+alert tcp any any -> any 4444 (msg:"Suspicious Activity on Port 4444"; classtype:trojan-activity; sid:3400020; rev:2;)
+alert udp any any -> any 4444 (msg:"Suspicious UDP Activity on Port 4444"; classtype:trojan-activity; sid:3400021; rev:2;)
+
+#Usage for testing : sudo nmap -sS -Pn --top-ports 500 youtube.com

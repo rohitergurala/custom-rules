@@ -1,0 +1,128 @@
+# E-Commerce & Shopping Detection Rules for Suricata
+# Purpose: Detect and block DNS queries AND HTTP access to shopping sites
+# Created: December 2024
+
+# ============================================================================
+# AMAZON - DNS + HTTP DETECTION
+# ============================================================================
+drop dns any any -> any any (msg:"Shopping - Amazon DNS Query"; dns_query; content:"amazon.com"; classtype:policy-violation; sid:5116000; rev:1;)
+drop tls any any -> any any (msg:"Shopping - Amazon TLS SNI"; flow:established,to_server; tls.sni; content:"amazon.com"; fast_pattern; classtype:policy-violation; sid:5116001; rev:1;)
+drop dns any any -> any any (msg:"Shopping - Amazon AWS DNS Query"; dns_query; content:"amazonawscom"; classtype:policy-violation; sid:5116002; rev:1;)
+drop tls any any -> any any (msg:"Shopping - Amazon AWS TLS SNI"; flow:established,to_server; tls.sni; content:"amazonawscom"; fast_pattern; classtype:policy-violation; sid:5116003; rev:1;)
+drop http any any -> any any (msg:"Shopping - Amazon HTTP Access"; http.host; content:"amazon.com"; classtype:policy-violation; sid:5116004; rev:1;)
+drop http any any -> any any (msg:"Shopping - Amazon AWS HTTP Access"; http.host; content:"amazonawscom"; classtype:policy-violation; sid:5116005; rev:1;)
+
+# ============================================================================
+# EBAY - DNS + HTTP DETECTION
+# ============================================================================
+drop dns any any -> any any (msg:"Shopping - eBay DNS Query"; dns_query; content:"ebay.com"; classtype:policy-violation; sid:5116006; rev:1;)
+drop tls any any -> any any (msg:"Shopping - eBay TLS SNI"; flow:established,to_server; tls.sni; content:"ebay.com"; fast_pattern; classtype:policy-violation; sid:5116007; rev:1;)
+drop http any any -> any any (msg:"Shopping - eBay HTTP Access"; http.host; content:"ebay.com"; classtype:policy-violation; sid:5116008; rev:1;)
+
+# ============================================================================
+# ETSY - DNS + HTTP DETECTION
+# ============================================================================
+drop dns any any -> any any (msg:"Shopping - Etsy DNS Query"; dns_query; content:"etsy.com"; classtype:policy-violation; sid:5116009; rev:1;)
+drop tls any any -> any any (msg:"Shopping - Etsy TLS SNI"; flow:established,to_server; tls.sni; content:"etsy.com"; fast_pattern; classtype:policy-violation; sid:5116010; rev:1;)
+drop http any any -> any any (msg:"Shopping - Etsy HTTP Access"; http.host; content:"etsy.com"; classtype:policy-violation; sid:5116011; rev:1;)
+
+# ============================================================================
+# ALIBABA - DNS + HTTP DETECTION
+# ============================================================================
+drop dns any any -> any any (msg:"Shopping - Alibaba DNS Query"; dns_query; content:"alibaba.com"; classtype:policy-violation; sid:5116012; rev:1;)
+drop tls any any -> any any (msg:"Shopping - Alibaba TLS SNI"; flow:established,to_server; tls.sni; content:"alibaba.com"; fast_pattern; classtype:policy-violation; sid:5116013; rev:1;)
+drop dns any any -> any any (msg:"Shopping - Alibaba Cloud DNS Query"; dns_query; content:"alibabacloud.com"; classtype:policy-violation; sid:5116014; rev:1;)
+drop tls any any -> any any (msg:"Shopping - Alibaba Cloud TLS SNI"; flow:established,to_server; tls.sni; content:"alibabacloud.com"; fast_pattern; classtype:policy-violation; sid:5116015; rev:1;)
+drop http any any -> any any (msg:"Shopping - Alibaba HTTP Access"; http.host; content:"alibaba.com"; classtype:policy-violation; sid:5116016; rev:1;)
+drop http any any -> any any (msg:"Shopping - Alibaba Cloud HTTP Access"; http.host; content:"alibabacloud.com"; classtype:policy-violation; sid:5116017; rev:1;)
+
+# ============================================================================
+# ALIEXPRESS - DNS + HTTP DETECTION
+# ============================================================================
+drop dns any any -> any any (msg:"Shopping - AliExpress DNS Query"; dns_query; content:"aliexpress.com"; classtype:policy-violation; sid:5116018; rev:1;)
+drop tls any any -> any any (msg:"Shopping - AliExpress TLS SNI"; flow:established,to_server; tls.sni; content:"aliexpress.com"; fast_pattern; classtype:policy-violation; sid:5116019; rev:1;)
+drop http any any -> any any (msg:"Shopping - AliExpress HTTP Access"; http.host; content:"aliexpress.com"; classtype:policy-violation; sid:5116020; rev:1;)
+
+# ============================================================================
+# SHOPIFY - DNS + HTTP DETECTION
+# ============================================================================
+drop dns any any -> any any (msg:"Shopping - Shopify DNS Query"; dns_query; content:"shopify.com"; classtype:policy-violation; sid:5116021; rev:1;)
+drop tls any any -> any any (msg:"Shopping - Shopify TLS SNI"; flow:established,to_server; tls.sni; content:"shopify.com"; fast_pattern; classtype:policy-violation; sid:5116022; rev:1;)
+drop http any any -> any any (msg:"Shopping - Shopify HTTP Access"; http.host; content:"shopify.com"; classtype:policy-violation; sid:5116023; rev:1;)
+
+# ============================================================================
+# WALMART - DNS + HTTP DETECTION
+# ============================================================================
+drop dns any any -> any any (msg:"Shopping - Walmart DNS Query"; dns_query; content:"walmart.com"; classtype:policy-violation; sid:5116024; rev:1;)
+drop tls any any -> any any (msg:"Shopping - Walmart TLS SNI"; flow:established,to_server; tls.sni; content:"walmart.com"; fast_pattern; classtype:policy-violation; sid:5116025; rev:1;)
+drop http any any -> any any (msg:"Shopping - Walmart HTTP Access"; http.host; content:"walmart.com"; classtype:policy-violation; sid:5116026; rev:1;)
+
+# ============================================================================
+# TARGET - DNS + HTTP DETECTION
+# ============================================================================
+drop dns any any -> any any (msg:"Shopping - Target DNS Query"; dns_query; content:"target.com"; classtype:policy-violation; sid:5116027; rev:1;)
+drop tls any any -> any any (msg:"Shopping - Target TLS SNI"; flow:established,to_server; tls.sni; content:"target.com"; fast_pattern; classtype:policy-violation; sid:5116028; rev:1;)
+drop http any any -> any any (msg:"Shopping - Target HTTP Access"; http.host; content:"target.com"; classtype:policy-violation; sid:5116029; rev:1;)
+
+# ============================================================================
+# BEST BUY - DNS + HTTP DETECTION
+# ============================================================================
+drop dns any any -> any any (msg:"Shopping - BestBuy DNS Query"; dns_query; content:"bestbuy.com"; classtype:policy-violation; sid:5116030; rev:1;)
+drop tls any any -> any any (msg:"Shopping - BestBuy TLS SNI"; flow:established,to_server; tls.sni; content:"bestbuy.com"; fast_pattern; classtype:policy-violation; sid:5116031; rev:1;)
+drop http any any -> any any (msg:"Shopping - BestBuy HTTP Access"; http.host; content:"bestbuy.com"; classtype:policy-violation; sid:5116032; rev:1;)
+
+# ============================================================================
+# NEWEGG - DNS + HTTP DETECTION
+# ============================================================================
+drop dns any any -> any any (msg:"Shopping - Newegg DNS Query"; dns_query; content:"newegg.com"; classtype:policy-violation; sid:5116033; rev:1;)
+drop tls any any -> any any (msg:"Shopping - Newegg TLS SNI"; flow:established,to_server; tls.sni; content:"newegg.com"; fast_pattern; classtype:policy-violation; sid:5116034; rev:1;)
+drop http any any -> any any (msg:"Shopping - Newegg HTTP Access"; http.host; content:"newegg.com"; classtype:policy-violation; sid:5116035; rev:1;)
+
+# ============================================================================
+# RAKUTEN - DNS + HTTP DETECTION
+# ============================================================================
+drop dns any any -> any any (msg:"Shopping - Rakuten DNS Query"; dns_query; content:"rakuten.com"; classtype:policy-violation; sid:5116036; rev:1;)
+drop tls any any -> any any (msg:"Shopping - Rakuten TLS SNI"; flow:established,to_server; tls.sni; content:"rakuten.com"; fast_pattern; classtype:policy-violation; sid:5116037; rev:1;)
+drop http any any -> any any (msg:"Shopping - Rakuten HTTP Access"; http.host; content:"rakuten.com"; classtype:policy-violation; sid:5116038; rev:1;)
+
+# ============================================================================
+# ZALANDO - DNS + HTTP DETECTION
+# ============================================================================
+drop dns any any -> any any (msg:"Shopping - Zalando DNS Query"; dns_query; content:"zalando.com"; classtype:policy-violation; sid:5116039; rev:1;)
+drop tls any any -> any any (msg:"Shopping - Zalando TLS SNI"; flow:established,to_server; tls.sni; content:"zalando.com"; fast_pattern; classtype:policy-violation; sid:5116040; rev:1;)
+drop http any any -> any any (msg:"Shopping - Zalando HTTP Access"; http.host; content:"zalando.com"; classtype:policy-violation; sid:5116041; rev:1;)
+
+# ============================================================================
+# ASOS - DNS + HTTP DETECTION
+# ============================================================================
+drop dns any any -> any any (msg:"Shopping - ASOS DNS Query"; dns_query; content:"asos.com"; classtype:policy-violation; sid:5116042; rev:1;)
+drop tls any any -> any any (msg:"Shopping - ASOS TLS SNI"; flow:established,to_server; tls.sni; content:"asos.com"; fast_pattern; classtype:policy-violation; sid:5116043; rev:1;)
+drop http any any -> any any (msg:"Shopping - ASOS HTTP Access"; http.host; content:"asos.com"; classtype:policy-violation; sid:5116044; rev:1;)
+
+# ============================================================================
+# WISH - DNS + HTTP DETECTION
+# ============================================================================
+drop dns any any -> any any (msg:"Shopping - Wish DNS Query"; dns_query; content:"wish.com"; classtype:policy-violation; sid:5116045; rev:1;)
+drop tls any any -> any any (msg:"Shopping - Wish TLS SNI"; flow:established,to_server; tls.sni; content:"wish.com"; fast_pattern; classtype:policy-violation; sid:5116046; rev:1;)
+drop http any any -> any any (msg:"Shopping - Wish HTTP Access"; http.host; content:"wish.com"; classtype:policy-violation; sid:5116047; rev:1;)
+
+# ============================================================================
+# SHEIN - DNS + HTTP DETECTION
+# ============================================================================
+drop dns any any -> any any (msg:"Shopping - Shein DNS Query"; dns_query; content:"shein.com"; classtype:policy-violation; sid:5116048; rev:1;)
+drop tls any any -> any any (msg:"Shopping - Shein TLS SNI"; flow:established,to_server; tls.sni; content:"shein.com"; fast_pattern; classtype:policy-violation; sid:5116049; rev:1;)
+drop http any any -> any any (msg:"Shopping - Shein HTTP Access"; http.host; content:"shein.com"; classtype:policy-violation; sid:5116050; rev:1;)
+
+# ============================================================================
+# BANGGOOD - DNS + HTTP DETECTION
+# ============================================================================
+drop dns any any -> any any (msg:"Shopping - Banggood DNS Query"; dns_query; content:"banggood.com"; classtype:policy-violation; sid:5116051; rev:1;)
+drop tls any any -> any any (msg:"Shopping - Banggood TLS SNI"; flow:established,to_server; tls.sni; content:"banggood.com"; fast_pattern; classtype:policy-violation; sid:5116052; rev:1;)
+drop http any any -> any any (msg:"Shopping - Banggood HTTP Access"; http.host; content:"banggood.com"; classtype:policy-violation; sid:5116053; rev:1;)
+
+# ============================================================================
+# GEARBEST - DNS + HTTP DETECTION
+# ============================================================================
+drop dns any any -> any any (msg:"Shopping - Gearbest DNS Query"; dns_query; content:"gearbest.com"; classtype:policy-violation; sid:5116054; rev:1;)
+drop tls any any -> any any (msg:"Shopping - Gearbest TLS SNI"; flow:established,to_server; tls.sni; content:"gearbest.com"; fast_pattern; classtype:policy-violation; sid:5116055; rev:1;)
+drop http any any -> any any (msg:"Shopping - Gearbest HTTP Access"; http.host; content:"gearbest.com"; classtype:policy-violation; sid:5116056; rev:1;)
