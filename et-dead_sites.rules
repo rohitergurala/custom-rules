@@ -44,8 +44,6 @@ drop http any any -> any any (msg:"Parking Dead Site  in HTTP Host Header (parki
 
 drop tls any any -> any any (msg:"Block TLS cert for parkin-ae.sbs"; tls.cert_subject; content:"CN=parkin-ae.sbs"; classtype:policy-violation; sid:5210017; rev:1;)
 
-drop tls any any -> any 443 (msg:"Block ECH SNI"; tls.sni; content:"cloudflare-ech.com"; nocase; sid:5210018; rev:1;)
+drop dns any any -> any any (msg:"Block DNS HTTPS Records(ECH)"; dns.query_type; content:"|00|41|"; classtype:policy-violation; sid:5210018; rev:1;)
 
-drop dns any any -> any any (msg:"Block DNS HTTPS Records(ECH)"; dns.query_type; content:"|00|41|"; classtype:policy-violation; sid:5210019; rev:1;)
-
-
+drop tls any any -> any 443 (msg:"Block ECH SNI"; tls.sni; content:"cloudflare-ech.com"; nocase; sid:5210019; rev:1;)
